@@ -1,0 +1,32 @@
+{
+  "name": "bounds.js",
+  "version": "1.0.0",
+  "description": "Asynchronous boundary detection.",
+  "main": "dist/bounds.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisCavs/bounds.js.git"
+  },
+  "keywords": [
+    "boundary, asynchronous, infinite, scroll, lazy, load, images, bounds"
+  ],
+  "author": {
+    "name": "Christopher Cavalea",
+    "email": "chriscavs94@gmail.com",
+    "url": "http://chriscavs.github.io/"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
+    "rollup": "^0.66.6",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-uglify": "6.0.0"
+  }
+}
