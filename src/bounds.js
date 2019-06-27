@@ -87,6 +87,7 @@ class Bound {
         ? data.onEnter(ratio)
         : data.onLeave(ratio)
     })
+
     this.onEmit()
   }
 
