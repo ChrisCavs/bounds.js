@@ -1,4 +1,4 @@
-# bounds.js
+# Bounds.js
 
 [![bounds.js on NPM](https://img.shields.io/npm/v/bounds.js.svg?style=flat-square)](https://www.npmjs.com/package/bounds.js)
 
@@ -12,17 +12,19 @@ There are many cases where we need to know the relative visibility of 2 elements
 
 Historically, implementing this detection required a mix of event handlers, loops, and calls to [getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect).  Since all of these operations run on the main thread, performance would often suffer in the process.
 
-bounds.js defies these expectations.  It detects intersections between elements asynchronously, keeping complex features off the main thread and improving performance.
+Bounds.js defies these expectations.  It detects intersections between elements asynchronously, keeping complex operations off the main thread and improving performance.
 
 ## Usage
+
+Bounds.js was developed with a modern JavaScript workflow in mind. To use it, it's recommended you have a build system in place that can transpile ES6, and bundle modules.
 
 Follow these steps to get started:
 
 1. [Install](#install)
-2. [How to Use](#howtouse)
+2. [How to Use](#how_to_use)
 3. [Options](#options)
 4. [API](#api)
-5. [Browser Support](#browsersupport)
+5. [Browser Support](#browser_support)
 
 ## Install
 
@@ -50,17 +52,13 @@ The second step is to have your new boundary [watch](#watch) for certain element
 
 ```es6
 const image = document.querySelector('img')
-const whenImageEnters = (ratio) => {
-  // change color
-}
-const whenImageLeaves = (ratio) => {
-  // reset color
-}
+const whenImageEnters = (ratio) => {}
+const whenImageLeaves = (ratio) => {}
 
 boundary.watch(image, whenImageEnters, whenImageLeaves)
 ```
 
-Now that we've covered the basic use case for bounds.js, lets delve into the [options](#options) and [API](#api).
+Now that we've covered the basics, lets delve into the [options](#options) and [API](#api).
 
 ## Options
 
@@ -158,18 +156,16 @@ Additionally, the bounds.js import object has a static property:
 
 ### watch(el [, onEnter, onLeave])
 
-Calling `watch` will instruct your boundary to watch the desired element.  When the specified element enters your boundary, the `onEnter` callback will be executed.  When the specified element leaves your boundary, the `onLeave` callback will be executed.  When a callback is executed, it is
+Calling `watch` will instruct your boundary to watch the desired element.  When the specified element enters your boundary, the `onEnter` callback will be executed.  When the specified element leaves your boundary, the `onLeave` callback will be executed.  
+
+Each callback is passed 1 argument, `ratio`, which represents the ratio of the elements bounding box that is inside the boundary.
 
 ```es6
 const boundary = bounds()
 
 const img = document.querySelector('img')
-const onImgEnter = () => {
-  console.log('the img is inside the boundary')
-}
-const onImgLeave = () => {
-  console.log('the img is outside the boundary')
-}
+const onImgEnter = (ratio) => {}
+const onImgLeave = (ratio) => {}
 
 boundary.watch(img, onImgEnter, onImgLeave)
 ```
@@ -196,6 +192,10 @@ The `check` method will return a `boolean`, indicating if the provided element i
 ### clear()
 
 The `clear` method will effectively `unWatch` all elements for the boundary, destroy all history for the elements the boundary was watching, and ensure that no events are emitted by the boundary going forward.
+
+### Bounds.checkCompatibility()
+
+The static `checkCompatibility` method will throw an error if Bounds.js is not supported in the user's browser.
 
 ## Browser Support
 
