@@ -22,7 +22,7 @@ const checkForObserver = () => {
   }
 }
 
-class Bound {
+class Boundary {
   constructor({root, margins, threshold, onEmit}) {
     checkForObserver()
 
@@ -114,4 +114,4 @@ class Bound {
   }
 }
 
-export default Bound
+export default Boundary
