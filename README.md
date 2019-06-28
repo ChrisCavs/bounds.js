@@ -10,7 +10,7 @@ Demo coming soon.
 
 Whether you're lazy-loading images, implementing infinite-scroll, or avoiding an ex-lover... it's important to set boundaries.
 
-Historically, implementing boundary detection required a mix of event handlers, loops, and calls to [getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect).  Since all of these operations run on the main thread, performance would suffer.
+Historically, boundary detection required a mix of event handlers, loops, and calls to [getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect).  Since all of these operations run on the main thread, performance would suffer.
 
 Bounds.js defies these expectations, providing a simple and powerful API.  It detects intersections between elements asynchronously, keeping complex operations off the main thread and improving performance.
 
