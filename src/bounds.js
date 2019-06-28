@@ -11,7 +11,7 @@ const getMargins = (margins = {}) => {
 }
 
 const checkForObserver = () => {
-  if (!IntersectionObserver) {
+  if (!('IntersectionObserver' in window)) {
     throw new Error(`
       bounds.js requires IntersectionObserver on the global object.
       IntersectionObserver is unavailable in IE and other older
@@ -97,7 +97,8 @@ class Bound {
       return {
         el: event.target,
         inside: event.isIntersecting,
-        outside: !event.isIntersecting
+        outside: !event.isIntersecting,
+        ratio: event.intersectionRatio
       }
     })
 
