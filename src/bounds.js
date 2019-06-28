@@ -1,9 +1,12 @@
 const noOp = () => {}
 
-const getMargins = (margins) => {
-  if (!margins) return '0px 0px 0px 0px'
-
-  const {top=0, right=0, bottom=0, left=0} = margins
+const getMargins = (margins = {}) => {
+  const {
+    top = 0,
+    right = 0,
+    bottom = 0,
+    left = 0
+  } = margins
   return `${top}px ${right}px ${bottom}px ${left}px`
 }
 
