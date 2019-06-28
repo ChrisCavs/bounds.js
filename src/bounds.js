@@ -33,12 +33,12 @@ class Bound {
       threshold: threshold || 0.0,
     }
 
+    this.nodes = []
+    this.onEmit = onEmit || noOp
     this.observer = new IntersectionObserver(
       this._emit.bind(this),
       options
     )
-    this.nodes = []
-    this.onEmit = onEmit || noOp
   }
 
   // API
