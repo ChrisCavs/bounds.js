@@ -1,199 +1,221 @@
-# Rallax.js
+# bounds.js
 
-[![rallax.js on NPM](https://img.shields.io/npm/v/rallax.js.svg?style=flat-square)](https://www.npmjs.com/package/rallax.js)
+[![bounds.js on NPM](https://img.shields.io/npm/v/bounds.js.svg?style=flat-square)](https://www.npmjs.com/package/bounds.js)
 
-Dead-simple parallax scrolling.
+Asynchronous boundary detection.
 
-[See a demo.](https://chriscavs.github.io/rallax-demo/)
+Demo coming soon.
+
+### Why
+
+There are many cases where we need to know the relative visibility of 2 elements - whether you're lazy-loading images, implementing an infinitely scrolling website, or creating an animation.  
+
+Historically, implementing this detection required a mix of event handlers, loops, and calls to [getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect).  Since all of these operations run on the main thread, performance would often suffer in the process.
+
+bounds.js defies these expectations.  It detects intersections between elements asynchronously, keeping complex features off the main thread and improving performance.
 
 ## Usage
 
 Follow these steps to get started:
 
-1. [Overview](#overview)
-2. [Install](#install)
-3. [Call](#call)
-4. [Review Options](#options)
-5. [Review API](#api)
-6. [Handling Page Refresh](#handlingPageRefresh)
+1. [Install](#install)
+2. [How to Use](#howtouse)
+3. [Options](#options)
+4. [API](#api)
+5. [Browser Support](#browsersupport)
 
-### Overview
+## Install
 
-Want to create dynamic parallax scrolling effects on your web page, without relying on jQuery?
-
-Rallax.js makes it easy to create a parallax effect on a target HTML element, with great performance and no dependencies.
-
-### Install
-
-Using NPM, install Rallax, and save it to your `package.json` dependencies.
+Using NPM, install bounds.js, and save it to your `package.json` dependencies.
 
 ```bash
-$ npm install rallax.js --save
+$ npm install bounds.js --save
 ```
 
-Then, import Rallax, naming it according to your preference.
+Then, import bounds.js, naming it according to your preference.
 
 ```es6
-import rallax from 'rallax.js'
+import bounds from 'bounds.js'
 ```
 
-### Call
+## How to Use
 
-To generate the desired effect, call Rallax, passing in your element/target-selector and your desired options.
+The first step is to create a new boundary using bounds.js.  To do so, call bounds.js, passing in your desired options.  Each option and its default is explained in the [options](#options) section below.
 
 ```es6
-const options = { speed: 0.4 }
-const parallax = rallax('.parallax', options)
-
-// or:
-
-const target = document.querySelector('.parallax')
-const parallax = rallax(target, { speed: 0.4 })
+const boundary = bounds(options)
 ```
 
-**Note**: Rallax.js does not make any assumptions regarding the styling of the target element.
+The second step is to have your new boundary [watch](#watch) for certain elements on you webpage.  When these elements intersect with the boundary, a callback is executed.  See an example below:
+
+```es6
+const image = document.querySelector('img')
+const whenImageEnters = (ratio) => {
+  // change color
+}
+const whenImageLeaves = (ratio) => {
+  // reset color
+}
+
+boundary.watch(image, whenImageEnters, whenImageLeaves)
+```
+
+Now that we've covered the basic use case for bounds.js, lets delve into the [options](#options) and [API](#api).
 
 ## Options
 
-You are not required to pass any options.  All options come with sensible defaults, shown below:
+You are not required to pass any options during boundary creation.  All options come with sensible defaults, shown below:
 
 ```es6
+// default options
 {
-  speed: 0.3,
-  mobilePx: false
+  root: window,       // the top-level document's viewport
+  margins: {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0
+  },
+  threshold: 0.0,
+  onEmit: () => {}    // no-op
 }
 ```
 
 Explanation of each option follows:
 
-* [speed](#speed)
-* [mobilePx](#mobilePx)
+* [root](#root)
+* [margins](#margins)
+* [threshold](#threshold)
+* [onEmit](#onEmit)
 
-### speed
+### root
 
-Accepts a `float` number.
+Accepts a `DOM node`.
 
-At a speed of `0`, the target will scroll like a static element.
-At a speed of `1`, the target will appear fixed (will move at the speed of scroll).
+The root is the element for which we are creating the boundary.  Events will be emitted whenever a watched element enters/exits the root element.
 
-### mobilePx
+### margins
 
-Accepts an `integer`, as number of pixels.
+Accepts a `mapping`, where values are stated in `pixels`.
 
-Pass this option if you want parallax for this target to automatically be disabled at a certain screen width.
+You can specify a `top`, `right`, `bottom`, or `left` margin to add to the root's [bounding box](https://developer.mozilla.org/en-US/docs/Glossary/bounding_box). *This affects detection, NOT style* on the root element.  For example:
+
+```es6
+const boundary = bounds({
+  margins: {
+    bottom: 100,
+  }
+})
+```
+
+The above boundary will fire a callback for any watched element that gets within 100px of its bottom border.
+
+### threshold
+
+Accepts a `number` between `0.0` and `1.0`.
+
+The ratio of intersecting area required before a callback is made.  A threshold of `0.0` means that if even a single pixel of a watched element enters the boundary, a callback is made.  A threshold of `1.0` means that every pixel of a watched element must be inside the boundary before a callback is made.
+
+### onEmit
+
+Accepts a `function` or anonymous function.
+
+The provided callback will be executed whenever any watched element enters or exits the boundary, *once all individual callbacks have executed*.  This is a useful option if you'd like some action to take place no matter what element enters/exits your boundary.  Here is an example of how it can be used:
+
+```es6
+const boundary = bounds({
+  onEmit: (actions) => {
+    if (actions.some(action => action.inside)) {
+      console.log('At least one element is inside my boundary')
+    }
+  }
+})
+```
+
+As seen above, the `onEmit` callback will be passed an argument `actions`, which is an array of objects representing the actions taken directly beforehand.  Each object in `actions` has the following detail:
+
+```es6
+{
+  el,       // DOM node
+  inside,   // boolean
+  outside,  // boolean
+  ratio     // floating number
+}
+```
 
 ## API
 
-Calling Rallax will return an object with a set of methods defined.  Those methods are:
+When you create a new boundary with bounds.js, an object with a set of methods will be returned.  Those methods are:
 
-* [stop](#stop)
-* [start](#start)
-* [getSpeed](#getspeed)
-* [changeSpeed](#changeSpeed)
-* [when](#when)
+* [watch](#watch)
+* [unWatch](#unwatch)
+* [check](#check)
+* [clear](#clear)
 
-### stop
+Additionally, the bounds.js import object has a static property:
 
-Calling `stop()` will pause the parallax effect on the target until the next time you call `start()`.
+* [checkCompatibility](#checkcompatibility)
+
+### watch(el [, onEnter, onLeave])
+
+Calling `watch` will instruct your boundary to watch the desired element.  When the specified element enters your boundary, the `onEnter` callback will be executed.  When the specified element leaves your boundary, the `onLeave` callback will be executed.  When a callback is executed, it is
 
 ```es6
-const parallax = rallax('.parallax')
+const boundary = bounds()
 
-if (condition) {
-  parallax.stop()
+const img = document.querySelector('img')
+const onImgEnter = () => {
+  console.log('the img is inside the boundary')
 }
-```
-
-### start
-
-Calling `start()` will re-enable the parallax effect if you had previously disabled it.  **Note:** calling `start()` will not re-enable the effect if you have disabled it with the [mobilePx](#mobilePx) option.
-
-```es6
-const parallax = rallax('.parallax')
-parallax.stop()
-
-// some time later
-
-parallax.start()
-```
-
-### getSpeed
-
-Returns the current speed of the target.
-
-### changeSpeed (speed)
-
-Accepts a `float` between `0` and `1`.
-
-Calling `changeSpeed` will change the speed of the target parallax effect.
-
-```es6
-// initialize the target at a speed of 0.6
-const parallax = rallax('.parallax', { speed: 0.6 })
-
-// change speed to 1, making the target appear fixed
-parallax.changeSpeed(1)
-```
-
-### when (condition, action)
-
-Accepts a condition `function` and an action `function`.
-
-Calling `when` will queue a condition and action onto the target, which will be evaluated before the target is scrolled.  The `when` method is useful for setting up all kinds of special effects.
-
-`when` methods can be chained together.
-
-```es6
-const parallax = rallax('.parallax')
-
-// after reaching a certain position in the document, 
-// increase the target's speed
-parallax.when(
-  () => window.scrollY > 400,
-  () => parallax.changeSpeed(1)
-)
-
-// stop the parallax after a certain period of time
-const startTime = new Date().getTime()
-
-parallax.when(
-  () => {
-    const newTime = new Date().getTime()
-    return newTime - startTime > 4000
-  },
-  () => parallax.stop()
-)
-```
-
-## Handling Page Refresh
-
-Rallax.js will adapt to the refreshing of the page, and place targets where they would be normally if they were to scroll to the point of refresh.
-
-**However**, if using [changeSpeed](#changeSpeed) in conjunction with [when](#when) methods/conditionals, it's important to scroll to the top of the page when the user refreshes.  Code to handle such a situation:
-
-```es6
-window.onbeforeunload = () => {
-  window.scrollTo(0, 0)
-  // alternatively, you can put an animation function here
-  // that will bring user to the top of page
+const onImgLeave = () => {
+  console.log('the img is outside the boundary')
 }
+
+boundary.watch(img, onImgEnter, onImgLeave)
 ```
+
+The `watch` method *will return a data object with the assigned properties*.  These properties can be mutated.  For exmaple, assuming we had the same methods as above:
+
+```es6
+// you can choose to not initially provide callbacks
+const imgOptions = boundary.watch(img)
+
+// later, you can assign new callbacks
+imgOptions.onEnter = onImgEnter
+imgOptions.onLeave = onImgLeave
+```
+
+### unWatch(el)
+
+The `unWatch` method will instruct your boundary to stop watching a certain element.  Callbacks for that element will no longer be executed.  The boundary instance will be returned.
+
+### check(el)
+
+The `check` method will return a `boolean`, indicating if the provided element is currently inside the boundary.
+
+### clear()
+
+The `clear` method will effectively `unWatch` all elements for the boundary, destroy all history for the elements the boundary was watching, and ensure that no events are emitted by the boundary going forward.
 
 ## Browser Support
 
-Rallax depends on the following browser APIs:
+bounds.js depends on the following browser APIs:
 
-* [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
+* [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver)
 
 Consequently, it supports the following natively:
 
-* Chrome 24+
-* Firefox 23+
-* Safari 6.1+
-* Opera 15+
-* IE 10+
-* iOS Safari 7.1+
+* Chrome 51+
+* Firefox 55+
+* Safari 12.1+
+* Edge 15+
+* iOS Safari 12.2+
+* Chrome for Android 51+
+* Opera - Supported
+* IE - No Support
+
+For browsers that do not currently support `IntersectionObserver`, consider a popular [polyfill](https://www.npmjs.com/package/intersection-observer) that has great browser support.
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT). © 2018 Christopher Cavalea
+[MIT](https://opensource.org/licenses/MIT). © 2019 Christopher Cavalea
