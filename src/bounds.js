@@ -3,7 +3,7 @@ const noOp = () => {}
 const getMargins = (margins) => {
   if (!margins) return '0px 0px 0px 0px'
 
-  const {top, right, bottom, left} = margins
+  const {top=0, right=0, bottom=0, left=0} = margins
   return `${top}px ${right}px ${bottom}px ${left}px`
 }
 
@@ -20,14 +20,14 @@ const checkForObserver = () => {
 }
 
 class Bound {
-  constructor({root, margins, thresholds, onEmit}}) {
+  constructor({root, margins, threshold, onEmit}) {
     checkForObserver()
 
     const marginString = getMargins(margins)
     const options = {
-      root: options.root || null,
+      root: root || null,
       rootMargin: marginString,
-      thresholds: thresholds || [0.0],
+      threshold: threshold || 0.0,
     }
 
     this.observer = new IntersectionObserver(
@@ -53,7 +53,7 @@ class Bound {
   }
 
   unWatch(el) {
-    const index = _findByNode(el, true)
+    const index = this._findByNode(el, true)
 
     if (index !== -1) {
       this.nodes.splice(index, 1)
@@ -64,7 +64,7 @@ class Bound {
   }
 
   check(el) {
-    const data = _findByNode(el)
+    const data = this._findByNode(el)
     return data.history
   }
 
@@ -75,9 +75,13 @@ class Bound {
     return this
   }
 
+  static checkCompatibility() {
+    checkForObserver()
+  }
+
   // HELPERS
   _emit(events) {
-    events.forEach(event => {
+    const actions = events.map(event => {
       const data = this._findByNode(event.target)
       const ratio = event.intersectionRatio
 
@@ -86,16 +90,22 @@ class Bound {
       event.isIntersecting
         ? data.onEnter(ratio)
         : data.onLeave(ratio)
+
+      return {
+        el: event.target,
+        inside: event.isIntersecting,
+        outside: !event.isIntersecting
+      }
     })
 
-    this.onEmit()
+    this.onEmit(actions)
   }
 
   _findByNode(el, returnIndex=false) {
     const func = returnIndex ? 'findIndex' : 'find'
 
     return this.nodes[func](node => {
-      return node.isEqualNode(el)
+      return node.el.isEqualNode(el)
     })
   }
 }

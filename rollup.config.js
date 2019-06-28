@@ -3,11 +3,11 @@ import babel from 'rollup-plugin-babel'
 import {uglify} from 'rollup-plugin-uglify'
 
 export default {
-  input: 'src/rallax.js',
+  input: 'src/bounds.js',
   output: {
-    file: 'dist/rallax.js',
+    file: 'dist/bounds.js',
     format: 'umd',
-    name: 'rallax'
+    name: 'bounds'
   },
   plugins: [
     resolve(),
