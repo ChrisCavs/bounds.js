@@ -1,6 +1,6 @@
 {
   "name": "bounds.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Asynchronous boundary detection.",
   "main": "dist/bounds.js",
   "license": "MIT",
