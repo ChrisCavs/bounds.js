@@ -2,7 +2,7 @@
 
 [![bounds.js on NPM](https://img.shields.io/npm/v/bounds.js.svg?style=flat-square)](https://www.npmjs.com/package/bounds.js)
 
-Asynchronous boundary detection.  1kb, no dependencies.
+Asynchronous boundary detection.  1KB, no dependencies.
 
 [Demo](https://chriscavs.github.io/bounds-demo/).
 
