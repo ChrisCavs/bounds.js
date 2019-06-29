@@ -187,7 +187,7 @@ The `unWatch` method will instruct your boundary to stop watching a certain elem
 
 ### check(el)
 
-The `check` method will return a `boolean`, indicating if the provided element is currently inside the boundary.
+The `check` method will return a `boolean`, indicating if the provided element is currently inside the boundary.  The check is based on history, which starts once you watch the element.  If the element is not currently being watched, `check` will return `undefined`.
 
 ### clear()
 

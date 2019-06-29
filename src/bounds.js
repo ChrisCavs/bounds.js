@@ -71,7 +71,7 @@ class Boundary {
   }
 
   check(el) {
-    const data = this._findByNode(el)
+    const data = this._findByNode(el) || {}
     return data.history
   }
 
