@@ -193,7 +193,7 @@ The `check` method will return a `boolean`, indicating if the provided element i
 
 The `clear` method will effectively `unWatch` all elements for the boundary, destroy all history for the elements the boundary was watching, and ensure that no events are emitted by the boundary going forward.
 
-### Bounds.checkCompatibility()
+### Bound.checkCompatibility()
 
 The static `checkCompatibility` method will throw an error if Bounds.js is not supported in the user's browser.
 
