@@ -22,7 +22,7 @@ const getMargins = (margins = {}) => {
 
 const noOp = () => {}
 
-const bounds = (options) => {
+const bound = (options) => {
   return new Boundary(options)
 }
 
@@ -118,4 +118,4 @@ class Boundary {
   }
 }
 
-export default bounds
+export default bound

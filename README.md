@@ -10,7 +10,7 @@ Demo coming soon.
 
 Whether you're lazy-loading images, implementing infinite-scroll, or avoiding an ex-lover... it's important to set boundaries.
 
-Historically, boundary detection required a mix of event handlers, loops, and calls to [getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect).  Since all of these operations run on the main thread, performance would suffer.
+Historically, boundary detection required a mix of event handlers, loops, and calls to [getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect).  Since these operations run on the main thread, performance would suffer.
 
 Bounds.js defies these expectations, providing a simple and powerful API.  It detects intersections between elements asynchronously, keeping complex operations off the main thread and improving performance.
 
@@ -34,10 +34,10 @@ Using NPM, install bounds.js, and save it to your `package.json` dependencies.
 $ npm install bounds.js --save
 ```
 
-Then, import bounds.js, naming it according to your preference.
+Then import, naming it according to your preference.
 
 ```es6
-import Bounds from 'bounds.js'
+import Bound from 'bounds.js'
 ```
 
 ## How to Use
@@ -45,7 +45,7 @@ import Bounds from 'bounds.js'
 The first step is to create a new boundary using bounds.js.  To do so, call it and pass in your desired options.  Each option and its default is explained in the [options](#options) section below.
 
 ```es6
-const boundary = Bounds()   // initialize with default options
+const boundary = Bound()   // initialize with default options
 ```
 
 The second step is to have your new boundary [watch](#api) for certain elements on you webpage.  When these elements intersect with the boundary, a callback is executed.  See an example below:
@@ -99,7 +99,7 @@ Accepts a `mapping`, where values are stated in `pixels`.
 You can specify a `top`, `right`, `bottom`, or `left` margin to add to the root's [bounding box](https://developer.mozilla.org/en-US/docs/Glossary/bounding_box). *This affects detection, NOT style* on the root element.  For example:
 
 ```es6
-const boundary = Bounds({
+const boundary = Bound({
   margins: {
     bottom: 100,
   }
@@ -121,7 +121,7 @@ Accepts a `function` or anonymous function.
 The provided callback will be executed whenever any watched element enters or exits the boundary, *once all individual callbacks have executed*.  This is a useful option if you'd like some action to take place no matter what element enters/exits your boundary.  Here is an example of how it can be used:
 
 ```es6
-const boundary = Bounds({
+const boundary = Bound({
   onEmit: (actions) => {
     if (actions.some(action => action.inside)) {
       console.log('At least one element is inside my boundary')
@@ -161,7 +161,7 @@ Calling `watch` will instruct your boundary to watch the desired element.  When 
 Each callback is passed 1 argument, `ratio`, which represents the ratio of the elements bounding box that is inside the boundary.
 
 ```es6
-const boundary = Bounds()
+const boundary = Bound()
 
 const img = document.querySelector('img')
 const onImgEnter = (ratio) => {}
