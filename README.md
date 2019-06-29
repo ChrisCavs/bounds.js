@@ -4,7 +4,7 @@
 
 Asynchronous boundary detection.
 
-Demo coming soon.
+[Demo](https://chriscavs.github.io/bounds-demo/).
 
 ### Why
 
