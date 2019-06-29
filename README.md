@@ -158,7 +158,7 @@ Additionally, the bounds.js import object has a static property:
 
 Calling `watch` will instruct your boundary to watch the desired element.  When the specified element enters your boundary, the `onEnter` callback will be executed.  When the specified element leaves your boundary, the `onLeave` callback will be executed.  
 
-Each callback is passed 1 argument, `ratio`, which represents the ratio of the elements bounding box that is inside the boundary.
+Each callback is passed 1 argument, `ratio`, which represents the ratio of the element's bounding box that is inside the boundary.
 
 ```es6
 const boundary = Bound()
@@ -170,7 +170,7 @@ const onImgLeave = (ratio) => {}
 boundary.watch(img, onImgEnter, onImgLeave)
 ```
 
-The `watch` method *will return a data object with the assigned properties*.  These properties can be mutated.  For exmaple, assuming we had the same methods as above:
+The `watch` method *will return a data object with the assigned properties*.  These properties can be mutated.  For example, assuming we had the same methods as above:
 
 ```es6
 // you can choose to not initially provide callbacks
@@ -199,7 +199,7 @@ The static `checkCompatibility` method will throw an error if Bounds.js is not s
 
 ## Browser Support
 
-bounds.js depends on the following browser APIs:
+Bounds.js depends on the following browser APIs:
 
 * [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver)
 
