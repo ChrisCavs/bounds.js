@@ -21,10 +21,10 @@ Bounds.js was developed with a modern JavaScript workflow in mind. To use it, it
 Follow these steps to get started:
 
 1. [Install](#install)
-2. [How to Use](#how_to_use)
+2. [How to Use](#howToUse)
 3. [Options](#options)
 4. [API](#api)
-5. [Browser Support](#browser_support)
+5. [Browser Support](#browserSupport)
 
 ## Install
 
