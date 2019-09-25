@@ -27,7 +27,7 @@ const bound = (options) => {
 }
 
 class Boundary {
-  constructor({root, margins, threshold, onEmit}) {
+  constructor({root, margins, threshold, onEmit} = {}) {
     checkForObserver()
 
     const marginString = getMargins(margins)
