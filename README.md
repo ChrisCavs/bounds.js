@@ -21,10 +21,10 @@ Bounds.js was developed with a modern JavaScript workflow in mind. To use it, it
 Follow these steps to get started:
 
 1. [Install](#install)
-2. [How to Use](#howToUse)
+2. [How to Use](#how-to-use)
 3. [Options](#options)
 4. [API](#api)
-5. [Browser Support](#browserSupport)
+5. [Browser Support](#browser-support)
 
 ## Install
 
@@ -145,14 +145,14 @@ As seen above, the `onEmit` callback will be passed an argument `actions`, which
 
 When you create a new boundary with bounds.js, an object with a set of methods will be returned.  Those methods are:
 
-* [watch](#watch)
-* [unWatch](#unwatch)
-* [check](#check)
+* [watch](#watchel--onenter-onleave)
+* [unWatch](#unwatchel)
+* [check](#checkel)
 * [clear](#clear)
 
 Additionally, the bounds.js import object has a static property:
 
-* [checkCompatibility](#checkcompatibility)
+* [checkCompatibility](#boundcheckcompatibility)
 
 ### watch(el [, onEnter, onLeave])
 
