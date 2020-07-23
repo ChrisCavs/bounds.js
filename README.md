@@ -84,7 +84,7 @@ Explanation of each option follows:
 * [root](#root)
 * [margins](#margins)
 * [threshold](#threshold)
-* [onEmit](#onEmit)
+* [onEmit](#onemit)
 
 ### root
 
